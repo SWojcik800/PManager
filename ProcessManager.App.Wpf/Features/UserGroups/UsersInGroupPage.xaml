@@ -1,0 +1,29 @@
+﻿<Page
+    x:Class="ProcessManager.App.Wpf.Views.UsersInGroupPage"
+    Style="{DynamicResource MahApps.Styles.Page}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:properties="clr-namespace:ProcessManager.App.Wpf.Properties"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Style="{StaticResource PageTitleStyle}"
+            Margin="{StaticResource MediumLeftMargin}"
+             />
+        <Grid Grid.Row="1">
+            <Label Content="Nazwa grupy:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+            <ListBox x:Name="selectedUsersListBox" ItemsSource="{Binding Users}" DisplayMemberPath="Login" SelectionMode="Multiple" SelectedItem="{Binding UsersInGroup}" Margin="94,42,579,98" SelectionChanged="ListBox_SelectionChanged" HorizontalContentAlignment="Left"/>
+            <Label Content="Użytkownicy:" HorizontalAlignment="Left" Margin="13,36,0,0" VerticalAlignment="Top" Width="76"/>
+            <Button Content="Zapisz" Command="{Binding SaveCommand}" HorizontalAlignment="Left" Margin="115,0,0,10" Width="116" VerticalAlignment="Bottom" Height="37"/>
+            <Button Content="Anuluj" Command="{Binding CancelCommand}" HorizontalAlignment="Right" Margin="0,0,690,10" Width="110" VerticalAlignment="Bottom" Height="37"/>
+            <TextBox HorizontalAlignment="Left" Margin="97,10,0,0" TextWrapping="Wrap" Text="{Binding UserGroup.DisplayName}" VerticalAlignment="Top" Width="281"/>
+        </Grid>
+    </Grid>
+</Page>

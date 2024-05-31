@@ -1,0 +1,77 @@
+﻿<Page
+    x:Class="ProcessManager.App.Wpf.Views.DictionariesGridPage"
+    Style="{DynamicResource MahApps.Styles.Page}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:core="clr-namespace:System;assembly=mscorlib"
+    xmlns:properties="clr-namespace:ProcessManager.App.Wpf.Properties"
+    xmlns:local="clr-namespace:ProcessManager.App.Wpf.Core.Shared.Enums;assembly=ProcessManager.App.Wpf.Core"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800">
+
+    <Page.Resources>
+        <ObjectDataProvider x:Key="myEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type Type="local:EntityStatus"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Style="{StaticResource PageTitleStyle}"
+            Margin="{StaticResource MediumLeftMargin}"
+            Text="Słowniki" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="551*"/>
+                <ColumnDefinition Width="249*"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid
+                GridLinesVisibility="Horizontal"
+                CanUserAddRows="False"
+                ItemsSource="{Binding Source}"
+                Margin="12,35,12,0"
+                KeyboardNavigation.TabNavigation="Once"
+                AutoGenerateColumns="False" Grid.ColumnSpan="2">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Dodaj nowy" Command="{Binding AddNewItemCommand}"></MenuItem>
+                        <MenuItem Header="Dodaj nowy słownik" Command="{Binding AddNewDictionaryCommand}"></MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="Wartość" Binding="{Binding Value}"></DataGridTextColumn>
+                    <DataGridComboBoxColumn Header="Status" SelectedItemBinding="{Binding Status}" ItemsSource="{Binding Source={StaticResource myEnum}}" ></DataGridComboBoxColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <ComboBox DisplayMemberPath="Name" 
+                      ItemsSource="{Binding Dictionaries}"
+                      SelectedItem="{Binding SelectedDictionary}"
+                      HorizontalAlignment="Left"
+                      Margin="12,4,0,0"
+                      VerticalAlignment="Top" 
+                      Width="208" Height="26">
+            </ComboBox>
+            <Button Command="{Binding SaveItemsChangesCommand}" Content="Zapisz zmiany" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="225,4,0,0" Height="27" Width="89" />
+            <Button Command="{Binding AddNewDictionaryCommand}" Content="Dodaj nowy słownik" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="319,4,11,0" Height="27" >
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0.715"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+        </Grid>
+    </Grid>
+</Page>

@@ -1,0 +1,14 @@
+﻿<Window x:Class="ProcessManager.App.Wpf.Dialogs.SelectItemDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProcessManager.App.Wpf.Dialogs"
+        mc:Ignorable="d"
+        Title="SelectItemDialog" Height="194" Width="270">
+    <Grid>
+        <ComboBox x:Name="dialogCommboBox" DisplayMemberPath="DisplayName" SelectedValuePath="Value" HorizontalAlignment="Center" Margin="0,38,0,0" VerticalAlignment="Top" Width="186"/>
+        <Button Content="Anuluj" HorizontalAlignment="Left" Margin="42,117,0,0" VerticalAlignment="Top" Width="74" Click="Button_Click_1" />
+        <Button Content="Zapisz" HorizontalAlignment="Left" Margin="154,117,0,0" VerticalAlignment="Top" Width="74" Click="Button_Click" />
+    </Grid>
+</Window>

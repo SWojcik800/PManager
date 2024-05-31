@@ -1,0 +1,125 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:properties="clr-namespace:ProcessManager.App.Wpf.Properties"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:behaviors="clr-namespace:ProcessManager.App.Wpf.Behaviors"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:workflows="clr-namespace:ProcessManager.App.Wpf.Core.Settings.Workflows;assembly=ProcessManager.App.Wpf.Core"
+    xmlns:enums="clr-namespace:ProcessManager.App.Wpf.Core.Shared.Enums;assembly=ProcessManager.App.Wpf.Core"
+    xmlns:viewmodels="clr-namespace:ProcessManager.App.Wpf.Features.Workflows.ViewModels"
+    xmlns:local="clr-namespace:ProcessManager.App.Wpf.MarkupExtensions"
+    d:DataContext="{d:DesignInstance Type=viewmodels:WorkflowEditViewViewModel}"
+    x:Class="ProcessManager.App.Wpf.Views.WorkflowEditViewPage"
+    Style="{DynamicResource MahApps.Styles.Page}"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid
+            Grid.Row="1"
+            Margin="{StaticResource MediumLeftRightMargin}"
+            Background="{DynamicResource MahApps.Brushes.Gray10}">
+            <!--
+            The Mahapps Gray10 color represents where you should place your content.
+            Place your content here.
+            -->
+            <mah:MetroAnimatedSingleRowTabControl Name="WorkflowTabControl">
+                <TabItem Header="Przepływ">
+                    <Grid Background="#FFE5E5E5" Margin="0,0,0,-3">
+                        <Label Content="Nazwa:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="61"/>
+                        <Label Content="Nazwa wyświetlana:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="121"/>
+                        <Grid HorizontalAlignment="Left" Height="186" Margin="136,17,0,0" VerticalAlignment="Top" Width="249">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="181*"/>
+                                <ColumnDefinition Width="68*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Workflow.Name}" VerticalAlignment="Top" Width="249" Grid.ColumnSpan="2"/>
+                            <TextBox HorizontalAlignment="Left" Margin="0,31,0,0" TextWrapping="Wrap" Text="{Binding Workflow.DisplayName}" VerticalAlignment="Top" Width="249" Grid.ColumnSpan="2"/>
+                            <ListBox Name="CanStartListBox" ItemsSource="{Binding UserGroups}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedUserGroups}" SelectionMode="Multiple" Margin="0,62,0,0" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged" />
+                        </Grid>
+                        <Label Content="Mogą rozpocząć:" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="151" Height="58"/>
+                        <ComboBox SelectedItem="{Binding Workflow.Status}" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type enums:EntityStatus}}}" HorizontalAlignment="Left" Margin="136,216,0,0" VerticalAlignment="Top" Width="249">
+                        </ComboBox>
+                        <Label Content="Status:" HorizontalAlignment="Left" Margin="10,216,0,0" VerticalAlignment="Top"/>
+                        <TextBox HorizontalAlignment="Left" Margin="136,247,0,0" TextWrapping="Wrap" Text="{Binding Workflow.CodeMask}" IsEnabled="{Binding CanCodeMaskBeEdited}" IsReadOnly="{Binding !CanCodeMaskBeEdited}" VerticalAlignment="Top" Width="249"/>
+                        <Label Content="Numeracja:" HorizontalAlignment="Left" Margin="10,247,0,0" VerticalAlignment="Top"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Formularz">
+                    <Grid Background="#FFE5E5E5">
+                        <DataGrid x:Name="workflowFormFieldsDataGrid" ItemsSource="{Binding WorkflowFormFields}"  
+                                  AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,43,0,0"
+                                  CellEditEnding="workflowFormFieldsDataGrid_CellEditEnding"
+                                  >
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Dodaj nowe pole" Command="{Binding AddNewFieldCommand}"></MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Kod" Binding="{Binding Code}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Nazwa wyświetlana" Binding="{Binding DisplayName}"></DataGridTextColumn>
+                                <DataGridComboBoxColumn Header="Typ pola" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type workflows:FormFieldType}}}" SelectedItemBinding="{Binding Type}" >
+                                    <DataGridComboBoxColumn.EditingElementStyle>
+                                        <Style TargetType="{x:Type ComboBox}">
+                                            <EventSetter Event="SelectionChanged" Handler="ComboBox_SelectionChanged" />
+                                        </Style>
+                                    </DataGridComboBoxColumn.EditingElementStyle>
+                                </DataGridComboBoxColumn>
+                                <DataGridTextColumn Header="Opcje" Binding="{Binding DisplayData}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem HorizontalAlignment="Center" Height="39" Header="Etapy" VerticalAlignment="Center" Width="105">
+                    <Grid Background="#FFE5E5E5">
+                        <DataGrid x:Name="workflowStagesGrid" ItemsSource="{Binding WorkflowStages}" AutoGenerateColumns="False" Margin="0,30,0,0"
+                                  CanUserAddRows="False" CellEditEnding="DataGrid_CellEditEnding">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}"></DataGridTextColumn>
+                                <mah:DataGridNumericUpDownColumn Header="Kolejność" Binding="{Binding Index}"></mah:DataGridNumericUpDownColumn>
+                                <DataGridComboBoxColumn Header="Typ obsługującego etap" SelectedItemBinding="{Binding AssigneeType}" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type workflows:WorkflowStageAssignee}}}" >
+                                    <DataGridComboBoxColumn.EditingElementStyle>
+                                        <Style TargetType="{x:Type ComboBox}">
+                                            <EventSetter Event="SelectionChanged" Handler="StagesGrid_SelectionChanged" />
+                                        </Style>
+                                    </DataGridComboBoxColumn.EditingElementStyle>
+                                </DataGridComboBoxColumn>
+                                <DataGridTextColumn Header="Obsługujący etap" Binding="{Binding AssigneeDisplayName}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Dodaj nowy etap" Command="{Binding AddNewStageCommand}"></MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem HorizontalAlignment="Center" Height="39" Header="Pola etapów" VerticalAlignment="Center" Width="183">
+                    <Grid Background="#FFE5E5E5">
+                        <DataGrid x:Name="dataGrid" ItemsSource="{Binding WorkflowStageFields}" AutoGenerateColumns="False" Margin="0,32,0,0">
+                            
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Header="Etap" Binding="{Binding WorkflowStage.Name}"/>
+                                <DataGridTextColumn Header="Pole" Binding="{Binding FieldCode}"/>
+                                <DataGridCheckBoxColumn Header="Widoczne" Binding="{Binding IsVisible}"/>
+                                <DataGridCheckBoxColumn Header="Edytowalne" Binding="{Binding IsEditable}"/>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Zatwierdź" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="72" Command="{Binding SaveCommand}" />
+                    </Grid>
+                </TabItem>
+            </mah:MetroAnimatedSingleRowTabControl>
+        </Grid>
+    </Grid>
+</Page>

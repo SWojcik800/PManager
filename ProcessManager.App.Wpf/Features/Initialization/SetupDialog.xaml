@@ -1,0 +1,33 @@
+﻿<Window x:Class="ProcessManager.App.Wpf.Dialogs.SetupDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProcessManager.App.Wpf.Dialogs"
+        xmlns:ViewModels="clr-namespace:ProcessManager.App.Wpf.ViewModels"
+        mc:Ignorable="d"
+        Title="SetupDialog" Height="300" Width="398"
+        SizeToContent="Manual"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        >
+    <Window.DataContext>
+        <ViewModels:SetupDialogViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="216*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox HorizontalAlignment="Left" Margin="152,52,0,0" TextWrapping="Wrap" Text="{Binding DbConnectionCreds.Server}"  VerticalAlignment="Top" Width="166"/>
+        <TextBox HorizontalAlignment="Left" Margin="152,83,0,0" TextWrapping="Wrap" Text="{Binding DbConnectionCreds.User}" VerticalAlignment="Top" Width="166"/>
+        <TextBox HorizontalAlignment="Left" Margin="152,114,0,0" TextWrapping="Wrap" Text="{Binding DbConnectionCreds.Password}" VerticalAlignment="Top" Width="166"/>
+        <TextBox HorizontalAlignment="Left" Margin="152,145,0,0" TextWrapping="Wrap" Text="{Binding DbConnectionCreds.InitialCatalog}" VerticalAlignment="Top" Width="166"/>
+        <Label Content="Server:" HorizontalAlignment="Left" Margin="52,52,0,0" VerticalAlignment="Top"/>
+        <Label Content="User:" HorizontalAlignment="Left" Margin="52,83,0,0" VerticalAlignment="Top"/>
+        <Label Content="Password:" HorizontalAlignment="Left" Margin="52,114,0,0" VerticalAlignment="Top"/>
+        <Label Content="Initial catalog:" HorizontalAlignment="Left" Margin="50,145,0,0" VerticalAlignment="Top"/>
+        <CheckBox Content="Integrated security" HorizontalAlignment="Left" IsChecked="{Binding DbConnectionCreds.IntegratedSecurity}" Margin="54,176,0,0" VerticalAlignment="Top" Width="147"/>
+        <Button Content="Zapisz" HorizontalAlignment="Left" Margin="128,214,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click" Command="{Binding SaveDataCommand}"/>
+
+    </Grid>
+</Window>

@@ -1,0 +1,53 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:properties="clr-namespace:ProcessManager.App.Wpf.Properties"
+    xmlns:viewModels="clr-namespace:ProcessManager.App.Wpf.ViewModels"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:Users="clr-namespace:ProcessManager.App.Wpf.Core.Settings.Users;assembly=ProcessManager.App.Wpf.Core"
+    xmlns:ViewModels="clr-namespace:ProcessManager.App.Wpf.ViewModels"
+    x:Class="ProcessManager.App.Wpf.Views.UsersGridPage"
+    Style="{DynamicResource MahApps.Styles.Page}"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800"
+>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Style="{StaticResource PageTitleStyle}"
+            Margin="{StaticResource MediumLeftMargin}"
+            Text="{x:Static properties:Resources.UsersDataGridPageTitle}" />
+        <Grid Grid.Row="1">
+            <DataGrid x:Name="usersGridView"
+                GridLinesVisibility="Horizontal"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False" 
+                IsReadOnly="True"
+                ItemsSource="{Binding Source}"
+                SelectedItem="{Binding SelectedItem}"
+                Margin="{StaticResource SmallLeftRightMargin}"
+                KeyboardNavigation.TabNavigation="Once" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Login" Binding="{Binding Login}" />
+                    <DataGridTextColumn Header="Status" Binding="{Binding StatusDisplayName}" />
+                    <DataGridTextColumn Header="Data utworzenia" Binding="{Binding CreationTime}" />
+                </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Dodaj nowy" Command="{Binding AddCommand}"></MenuItem>
+                        <MenuItem Header="Edytuj" Command="{Binding EditCommand}" ></MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.DataContext>
+                    <ViewModels:UsersGridViewModel/>
+                </DataGrid.DataContext>
+            </DataGrid>
+        </Grid>
+
+    </Grid>
+</Page>
